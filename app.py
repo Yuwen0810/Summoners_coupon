@@ -12,7 +12,7 @@ from linebot.exceptions import (
 from linebot.models import *
 
 from utils import Recorder
-from coupon import update_coupon, init_coupon
+from coupon import update_coupon, sys_initial
 
 # ======python的函數庫==========
 import os
@@ -41,6 +41,12 @@ channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 
 # Channel Access Token
 channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+
+# exist user
+exist_user = os.getenv('EXIST_USER', None)
+if exist_user:
+	exist_user = exist_user.split(";")
+
 
 if channel_secret is None:
 	print('Specify LINE_CHANNEL_SECRET as environment variable.')
@@ -148,7 +154,7 @@ def refresh_coupon():
 import os
 
 if __name__ == "__main__":
-	init_coupon()
+	sys_initial(exist_user)
 
 	scheduler = APScheduler()
 	scheduler.init_app(app)
