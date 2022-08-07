@@ -38,10 +38,10 @@ app.config.from_object(Config())
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
 # Channel Secret
-channel_secret = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+channel_secret = os.getenv('LINE_CHANNEL_SECRET', None)
 
 # Channel Access Token
-channel_access_token = os.getenv('LINE_CHANNEL_SECRET', None)
+channel_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
 
 if channel_secret is None:
 	print('Specify LINE_CHANNEL_SECRET as environment variable.')
