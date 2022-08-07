@@ -82,13 +82,13 @@ def handle_message(event):
 		if record.add_user(user_id):
 			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="已成功開啟通知"))
 		else:
-			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知尚未關閉"))
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知已開啟"))
 
 	elif msg == "關閉通知":
 		if record.remove_user(user_id):
 			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="已成功關閉通知"))
 		else:
-			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知尚未開啟"))
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知已關閉"))
 
 	elif msg == "設定":
 		line_bot_api.reply_message(  # 回復傳入的訊息文字
