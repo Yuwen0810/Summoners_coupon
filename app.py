@@ -124,6 +124,14 @@ def handle_message(event):
 		content = "您可以輸入：\n1. 「設定」：開啟「通知設定」面板\n2. 「Coupon」：取得最新五筆序號"
 		line_bot_api.reply_message(event.reply_token, TextSendMessage(text=content))
 
+	elif msg == "更新":
+		new_data = update_coupon()
+		user_ids = record.get_all_user()
+		if new_data and user_ids:
+			for d in new_data:
+				line_bot_api.multicast(user_ids, TextSendMessage(
+					text=f"[New Coupon]\nlabel: {d['label']}\ncreate_time: {d['create_time']}\nlink: {d['link']}"))
+
 
 def refresh_coupon():
 	print("Refresh coupon")
