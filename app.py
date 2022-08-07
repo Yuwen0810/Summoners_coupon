@@ -1,3 +1,5 @@
+import sys
+
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
 
@@ -9,12 +11,13 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
-
 from utils import Recorder
 from coupon import update_coupon, init_coupon
 
 # ======python的函數庫==========
 import os
+
+
 # ======python的函數庫==========
 
 class Config(object):
@@ -34,11 +37,21 @@ app.config.from_object(Config())
 
 static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 
-# Channel Access Token
-line_bot_api = LineBotApi('E68pGtHHEUpNy2iy0h/kBhPw+EsKvFSwCzgDetI/ojttExO9aCnDqWjKiARF84n0gvmPoq2fkrlCpcEcl7zP/+pVha2nwvui6AnNnKaEAwk/+LDogoTlv8uk/daYA+upTs/2xvKUmcYd9k6gk15HpAdB04t89/1O/w1cDnyilFU=')
-
 # Channel Secret
-handler = WebhookHandler('e6706450cfe8f8363798345abb74b617')
+channel_secret = os.getenv('LINE_CHANNEL_ACCESS_TOKEN', None)
+
+# Channel Access Token
+channel_access_token = os.getenv('LINE_CHANNEL_SECRET', None)
+
+if channel_secret is None:
+	print('Specify LINE_CHANNEL_SECRET as environment variable.')
+	sys.exit(1)
+if channel_access_token is None:
+	print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
+	sys.exit(1)
+
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
 
 record = Recorder()
 
@@ -57,6 +70,7 @@ def callback():
 	except InvalidSignatureError:
 		abort(400)
 	return 'OK'
+
 
 # 處理訊息
 @handler.add(MessageEvent, message=TextMessage)
@@ -99,13 +113,15 @@ def handle_message(event):
 			)
 		)
 
+
 def refresh_coupon():
 	print("Refresh coupon")
 	new_data = update_coupon()
 	user_ids = record.get_all_user()
 	if new_data and user_ids:
 		for d in new_data:
-			line_bot_api.multicast(user_ids, TextSendMessage(text=f"[New Coupon]\nlabel: {d['label']}\ncreate_time: {d['create_time']}\nlink: {d['link']}"))
+			line_bot_api.multicast(user_ids, TextSendMessage(
+				text=f"[New Coupon]\nlabel: {d['label']}\ncreate_time: {d['create_time']}\nlink: {d['link']}"))
 
 
 import os
@@ -120,4 +136,4 @@ if __name__ == "__main__":
 	port = int(os.environ.get('PORT', 80))
 	app.run(host='0.0.0.0', port=port)
 
-	# app.run()
+# app.run()
