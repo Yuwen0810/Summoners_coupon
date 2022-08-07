@@ -17,7 +17,6 @@ from coupon import update_coupon, init_coupon
 # ======python的函數庫==========
 import os
 
-
 # ======python的函數庫==========
 
 class Config(object):
@@ -91,7 +90,7 @@ def handle_message(event):
 		else:
 			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知尚未開啟"))
 
-	elif msg.lower() == "設定":
+	elif msg == "設定":
 		line_bot_api.reply_message(  # 回復傳入的訊息文字
 			event.reply_token,
 			TemplateSendMessage(
@@ -112,6 +111,18 @@ def handle_message(event):
 				)
 			)
 		)
+
+	elif msg.lower() == "coupon":
+		coupons = record.get_last_coupon()
+		send_message = [TextSendMessage(
+					text=f"[New Coupon]\nlabel: {coupon['label']}\ncreate_time: {coupon['create_time']}\nlink: {coupon['link']}"
+				) for coupon in coupons]
+
+		line_bot_api.reply_message(event.reply_token, send_message)
+
+	elif msg == "幫助" or msg.lower() == "help":
+		content = "您可以輸入：\n1. 「設定」：開啟「通知設定」面板\n2. 「Coupon」：取得最新五筆序號"
+		line_bot_api.reply_message(event.reply_token, TextSendMessage(text=content))
 
 
 def refresh_coupon():

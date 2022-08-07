@@ -52,13 +52,16 @@ class Recorder:
 	# Coupons Function
 	def add_coupon(self, label, link, create_time, status):
 		record = get_record()
-		if label not in record["coupon"]:
-			new_coupon = {
-				"label": label,
-				"link": link,
-				"create_time": create_time,
-				"status": status,
-			}
-			record["coupon"] = [new_coupon] + record["coupon"]
-			save_record(record)
-			print(f"Add coupon: {label}")
+		new_coupon = {
+			"label": label,
+			"link": link,
+			"create_time": create_time,
+			"status": status,
+		}
+		record["coupon"] = [new_coupon] + record["coupon"]
+		save_record(record)
+		print(f"Add coupon: {label}")
+
+	def get_last_coupon(self, n=5):
+		record = get_record()
+		return record["coupon"][:5]
