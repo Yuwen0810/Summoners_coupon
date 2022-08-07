@@ -79,34 +79,34 @@ def handle_message(event):
 	user_id = event.source.user_id
 	timestamp = event.timestamp
 
-	if msg == "Turn on notifications":
+	if msg == "開啟通知":
 		if record.add_user(user_id):
-			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="[Success] Notifications are on"))
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="已成功開啟通知"))
 		else:
-			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Already on"))
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知尚未關閉"))
 
-	elif msg == "Turn off notifications":
+	elif msg == "關閉通知":
 		if record.remove_user(user_id):
-			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="[Success] Notifications are off"))
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="已成功關閉通知"))
 		else:
-			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Already off"))
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知尚未開啟"))
 
-	elif msg.lower() == "setting":
+	elif msg.lower() == "設定":
 		line_bot_api.reply_message(  # 回復傳入的訊息文字
 			event.reply_token,
 			TemplateSendMessage(
-				alt_text='Buttons template',
+				alt_text='通知設定',
 				template=ButtonsTemplate(
-					title='Setting',
-					text='Select notifications status',
+					title='通知設定',
+					text='請選擇通知狀態',
 					actions=[
 						MessageTemplateAction(
-							label='Turn on',
-							text='Turn on notifications'
+							label='開啟通知',
+							text='開啟通知'
 						),
 						MessageTemplateAction(
-							label='Turn off',
-							text='Turn off notifications'
+							label='關閉通知',
+							text='關閉通知'
 						)
 					]
 				)
