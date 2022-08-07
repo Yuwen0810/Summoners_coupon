@@ -131,6 +131,8 @@ def handle_message(event):
 			for d in new_data:
 				line_bot_api.multicast(user_ids, TextSendMessage(
 					text=f"[New Coupon]\nlabel: {d['label']}\ncreate_time: {d['create_time']}\nlink: {d['link']}"))
+		else:
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="沒有新的 Coupon"))
 
 
 def refresh_coupon():
