@@ -1,6 +1,3 @@
-# heroku: https://linebot-exam-tool.herokuapp.com/callback
-# Yuwen PC: https://6f443bb66a69.ngrok.io/callback
-
 from flask import Flask, request, abort
 from flask_apscheduler import APScheduler
 
@@ -30,7 +27,6 @@ class Config(object):
 	}]
 	SCHEDULER_TIMEZONE = 'Asia/Taipei'  # 配置時區
 	SCHEDULER_API_ENABLED = True  # 新增API
-
 
 
 app = Flask(__name__)
@@ -69,7 +65,6 @@ def handle_message(event):
 	user_id = event.source.user_id
 	timestamp = event.timestamp
 
-	print(msg == "開啟通知")
 	if msg == "開啟通知":
 		record.add_user(user_id)
 		line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知已開啟"))
@@ -78,6 +73,27 @@ def handle_message(event):
 		record.remove_user(user_id)
 		line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知已關閉"))
 
+	else:
+		line_bot_api.reply_message(  # 回復傳入的訊息文字
+			event.reply_token,
+			TemplateSendMessage(
+				alt_text='Buttons template',
+				template=ButtonsTemplate(
+					title='Setting',
+					text='Select notifications status',
+					actions=[
+						MessageTemplateAction(
+							label='Turn on',
+							text='Turn on'
+						),
+						MessageTemplateAction(
+							label='Turn off',
+							text='Turn off'
+						)
+					]
+				)
+			)
+		)
 
 def refresh_coupon():
 	print("Refresh coupon")
@@ -97,5 +113,7 @@ if __name__ == "__main__":
 	scheduler.init_app(app)
 	scheduler.start()
 
-	port = int(os.environ.get('PORT', 8080))
-	app.run(host='0.0.0.0', port=port)
+	# port = int(os.environ.get('PORT', 8080))
+	# app.run(host='0.0.0.0', port=port)
+
+	app.run()
