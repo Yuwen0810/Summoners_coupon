@@ -33,6 +33,8 @@ class Recorder:
 			print(f"add user: {user_id}")
 			record["user"].append(user_id)
 			save_record(record)
+			return True
+		return False
 
 	def remove_user(self, user_id):
 		record = get_record()
@@ -40,6 +42,8 @@ class Recorder:
 			print(f"remove user: {user_id}")
 			record["user"].remove(user_id)
 			save_record(record)
+			return True
+		return False
 
 	def get_all_user(self):
 		record = get_record()

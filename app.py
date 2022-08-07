@@ -65,15 +65,19 @@ def handle_message(event):
 	user_id = event.source.user_id
 	timestamp = event.timestamp
 
-	if msg == "開啟通知":
-		record.add_user(user_id)
-		line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知已開啟"))
+	if msg == "Turn on notifications":
+		if record.add_user(user_id):
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="[Success] Notifications are on"))
+		else:
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Already on"))
 
-	elif msg == "關閉通知":
-		record.remove_user(user_id)
-		line_bot_api.reply_message(event.reply_token, TextSendMessage(text="通知已關閉"))
+	elif msg == "Turn off notifications":
+		if record.remove_user(user_id):
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="[Success] Notifications are off"))
+		else:
+			line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Already off"))
 
-	else:
+	elif msg.lower() == "setting":
 		line_bot_api.reply_message(  # 回復傳入的訊息文字
 			event.reply_token,
 			TemplateSendMessage(
@@ -84,11 +88,11 @@ def handle_message(event):
 					actions=[
 						MessageTemplateAction(
 							label='Turn on',
-							text='Turn on'
+							text='Turn on notifications'
 						),
 						MessageTemplateAction(
 							label='Turn off',
-							text='Turn off'
+							text='Turn off notifications'
 						)
 					]
 				)
@@ -113,7 +117,7 @@ if __name__ == "__main__":
 	scheduler.init_app(app)
 	scheduler.start()
 
-	# port = int(os.environ.get('PORT', 8080))
-	# app.run(host='0.0.0.0', port=port)
+	port = int(os.environ.get('PORT', 8080))
+	app.run(host='0.0.0.0', port=port)
 
-	app.run()
+	# app.run()
