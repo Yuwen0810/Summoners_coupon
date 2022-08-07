@@ -133,7 +133,6 @@ if __name__ == "__main__":
 	scheduler.init_app(app)
 	scheduler.start()
 
-	# port = int(os.environ.get('PORT', 80))
-	app.run(port=80)
+	port = int(os.environ.get('PORT', 5000))
+	app.run(host='0.0.0.0', port=port)
 
-# app.run()
