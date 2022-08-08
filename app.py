@@ -16,7 +16,7 @@ from coupon import update_coupon, sys_initial
 
 # ======python的函數庫==========
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # ======python的函數庫==========
 
@@ -90,7 +90,7 @@ def handle_message(event):
 	user_id = event.source.user_id
 	timestamp = event.timestamp
 
-	print(f"[Message] user: {user_id}, content: {msg}, time: {datetime.now()}")
+	print(f"[Message] user: {user_id}, content: {msg}, time: {str(datetime.now() + timedelta(hours=8)).split('.')[0]}")
 
 	if msg == "開啟通知":
 		if record.add_user(user_id):
