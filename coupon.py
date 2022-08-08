@@ -8,7 +8,7 @@ from utils import get_record, save_record, Recorder
 
 recorder = Recorder()
 
-def sys_initial(user_ids):
+def sys_initial(user_ids=None):
 	raw_data = _get_coupon_data(300)
 	if raw_data["result"] == "success":
 		data = raw_data.get("data", None)
@@ -87,5 +87,5 @@ def _get_coupon_data(n=10):
 
 
 if __name__ == '__main__':
-	update_coupon()
-	# init_coupon()
+	# update_coupon()
+	sys_initial()

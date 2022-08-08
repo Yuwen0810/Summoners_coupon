@@ -4,7 +4,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', hour='0-16', second='*/10')
+@sched.scheduled_job('cron', hour='0-16', minute='*/20')
 def scheduled_job():
 	url = "https://summoners-coupon.herokuapp.com/"
 	conn = urllib.request.urlopen(url)
