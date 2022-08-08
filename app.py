@@ -1,6 +1,6 @@
 import sys
 
-from flask import Flask, request, abort
+from flask import Flask, request, abort, render_template
 from flask_apscheduler import APScheduler
 
 from linebot import (
@@ -59,6 +59,11 @@ line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
 record = Recorder()
+
+@app.route("/")
+def home():
+	return render_template("home.html")
+
 
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['POST'])
