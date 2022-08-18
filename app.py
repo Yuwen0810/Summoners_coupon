@@ -158,8 +158,8 @@ def refresh_coupon():
 			line_bot_api.multicast(user_ids, TextSendMessage(
 				text=f"[New Coupon]\nlabel: {d['label']}\ncreate_time: {d['create_time']}\nlink: {d['link']}"))
 
-
 import os
+
 
 if __name__ == "__main__":
 	sys_initial(exist_user)
